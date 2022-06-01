@@ -1,3 +1,5 @@
+from kivy.config import Config
+Config.set('graphics', 'resizable', False)
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
 from kivy.lang import Builder
