@@ -9,6 +9,8 @@ from kivymd.uix.behaviors.elevation import FakeRectangularElevationBehavior
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.properties import StringProperty
 from kivy.core.window import Window
+from kivy.storage.jsonstore import JsonStore
+from tinydb import TinyDB, Query
 Window.size = (350, 600)
 
 class TodoCard(FakeRectangularElevationBehavior, MDFloatLayout):
@@ -16,9 +18,12 @@ class TodoCard(FakeRectangularElevationBehavior, MDFloatLayout):
     description = StringProperty()
 
 class TasksistorApp(MDApp):
-    todo = 0
 
     def build(self):
+        global index
+        index = 0
+        global store
+        store = JsonStore("data.json")
         global screen_manager
         screen_manager = ScreenManager()
         screen_manager.add_widget(Builder.load_file("assets/Kivy/Main.kv"))
@@ -56,6 +61,10 @@ class TasksistorApp(MDApp):
             screen_manager.transition.direction = "right"
             screen_manager.get_screen("main").todo_list.add_widget(TodoCard(title=title.title(), description=description))
             
+            global index
+            store[index] = {"title": title, "description": description, "time": self.time()}
+            index+=1
+
             screen_manager.get_screen("add_todo").description.text = ""
             screen_manager.get_screen("add_todo").title.text = ""
         elif title == "":
@@ -67,7 +76,7 @@ class TasksistorApp(MDApp):
         elif len(description) > 55:
             Snackbar(text="Too Long description!", snackbar_x="10dp", snackbar_y="10dp", size_hint_y=.08, size_hint_x=(Window.width-(dp(10)*2))/Window.width, bg_color=(1,170/255,23/255,1), font_size="18sp").open()
 
-    def remove_todo(self, todo):
+    def remove_todo(self, todo, title):
         screen_manager.get_screen("main").todo_list.remove_widget(todo)
 
 if __name__ == "__main__":

@@ -5,19 +5,20 @@
     elevation: 10
     md_bg_color: 1,1,1,1
     radius: [8]
-    MDFloatLayout:
+    MDFloatLayout: #Bar
         id: bar
         size_hint: .01, .9
         pos_hint: {"center_x": .02, "center_y": .5}
         md_bg_color: 1, 170/255, 23/255, 1
-    MDLabel:
+    MDLabel: #Title
+        id: title
         text: root.title
         markup: True
         font_name: "assets/fonts/Poppins-SemiBold.ttf"
         font_size: "20sp"
         size_hint_x: .8
         pos_hint: {"center_x": .46, "center_y": .8}
-    MDCheckbox:
+    MDCheckbox: #Checkbox
         size_hint: None, None
         ripple_scale: 0
         size: "48dp", "48dp"
@@ -25,7 +26,7 @@
         selected_color: 0, 179/255, 0, 1
         pos_hint: {"center_x": .95, "center_y": .8}
         on_active: app.on_complete(*args, description, bar, delete)
-    MDLabel:
+    MDLabel: #Description
         id: description
         text: root.description
         font_name: "assets/fonts/Poppins-Regular.ttf"
@@ -33,7 +34,7 @@
         size_hint_x: .82
         line_height: .8
         pos_hint: {"center_x": .47, "center_y": .4}
-    MDLabel:
+    MDLabel: #Time
         id: time
         text: app.time()
         font_name: "assets/fonts/Poppins-Regular.ttf"
@@ -42,7 +43,7 @@
         size_hint_x: .7
         line_height: .5
         pos_hint: {"x": .7, "center_y": .07}
-    MDIconButton:
+    MDIconButton: #Delete
         id: delete 
         icon: "delete"
         pos_hint: {"center_x": .949, "center_y": .45}
@@ -51,7 +52,7 @@
         text_color: 180/255, 180/255, 180/255, 1
         ripple_scale: 0
         on_release: 
-            app.remove_todo(todo)
+            app.remove_todo(todo, title)
 MDScreen:
     date: date
     todo_list: todo_list
