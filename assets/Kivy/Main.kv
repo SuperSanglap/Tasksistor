@@ -19,11 +19,12 @@
         pos_hint: {"center_x": .46, "center_y": .8}
     MDCheckbox:
         size_hint: None, None
+        ripple_scale: 0
         size: "48dp", "48dp"
         unselected_color: 1, 170/255, 23/255, 1
         selected_color: 0, 179/255, 0, 1
         pos_hint: {"center_x": .95, "center_y": .8}
-        on_active: app.on_complete(*args, description, bar)
+        on_active: app.on_complete(*args, description, bar, delete)
     MDLabel:
         id: description
         text: root.description
@@ -40,7 +41,7 @@
         font_size: "11sp"
         size_hint_x: .7
         line_height: .5
-        pos_hint: {"x": .84, "center_y": .07}
+        pos_hint: {"x": .7, "center_y": .07}
     MDIconButton:
         id: delete 
         icon: "delete"
@@ -48,6 +49,7 @@
         user_font_size: "28sp"
         theme_text_color: "Custom"
         text_color: 180/255, 180/255, 180/255, 1
+        ripple_scale: 0
         on_release: 
             app.remove_todo(todo)
 MDScreen:

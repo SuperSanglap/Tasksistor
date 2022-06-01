@@ -34,18 +34,20 @@ class TasksistorApp(MDApp):
         day = str(datetime.datetime.now().strftime("%d"))
         screen_manager.get_screen("main").date.text = f"{days[wd]}, {day} {month} {year}"
 
-    def on_complete(self, checkbox, value, description, bar):
+    def on_complete(self, checkbox, value, description, bar, delete):
         if value:
             description.text = f"[s]{description.text}[/s]"
             bar.md_bg_color = 0, 179/255, 0, 1
+            delete.text_color = 1, 170/255, 23/255, 1
         else:
             remove = ["[s]", "[/s]"]
             for i in remove:
                 description.text = description.text.replace(i, "")
                 bar.md_bg_color = 1, 170/255, 23/255, 1
+            delete.text_color = 180/255, 180/255, 180/255, 1
 
     def time(self):
-        time = datetime.datetime.now().strftime("%I:%M %p")
+        time = datetime.datetime.now().strftime("%b %d, %I:%M %p")
         return time
 
     def add_todo(self, title, description):
