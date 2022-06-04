@@ -5,14 +5,15 @@ from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.metrics import dp
 from kivymd.uix.snackbar import Snackbar
-from datetime import date
-import datetime
 from kivymd.uix.behaviors.elevation import FakeRectangularElevationBehavior
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.properties import StringProperty
 from kivy.core.window import Window
 from kivy.storage.jsonstore import JsonStore
 from tinydb import TinyDB, Query
+from datetime import date
+import datetime
+
 Window.size = (350, 600)
 
 class TodoCard(FakeRectangularElevationBehavior, MDFloatLayout):
