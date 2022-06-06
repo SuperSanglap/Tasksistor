@@ -9,10 +9,8 @@ from kivymd.uix.behaviors.elevation import FakeRectangularElevationBehavior
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.properties import StringProperty
 from kivy.core.window import Window
-from kivy.storage.jsonstore import JsonStore
-from tinydb import TinyDB, Query
 from datetime import date
-import datetime
+import datetime, json
 
 Window.size = (350, 600)
 
@@ -23,10 +21,6 @@ class TodoCard(FakeRectangularElevationBehavior, MDFloatLayout):
 class TasksistorApp(MDApp):
 
     def build(self):
-        global index
-        index = 0
-        global store
-        store = JsonStore("data.json")
         global screen_manager
         screen_manager = ScreenManager()
         screen_manager.add_widget(Builder.load_file("assets/Kivy/Main.kv"))
@@ -41,6 +35,10 @@ class TasksistorApp(MDApp):
         month = str(datetime.datetime.now().strftime("%b"))
         day = str(datetime.datetime.now().strftime("%d"))
         screen_manager.get_screen("main").date.text = f"{days[wd]}, {day} {month} {year}"
+        try:
+            self.load_todo()
+        except Exception as e:
+            print(e)
 
     def on_complete(self, checkbox, value, description, bar, delete):
         if value:
@@ -63,10 +61,8 @@ class TasksistorApp(MDApp):
             screen_manager.current = "main"
             screen_manager.transition.direction = "right"
             screen_manager.get_screen("main").todo_list.add_widget(TodoCard(title=title.title(), description=description))
-            
-            global index
-            store[index] = {"title": title, "description": description, "time": self.time()}
-            index+=1
+
+            self.save_todo(title, description)
 
             screen_manager.get_screen("add_todo").description.text = ""
             screen_manager.get_screen("add_todo").title.text = ""
@@ -81,6 +77,18 @@ class TasksistorApp(MDApp):
 
     def remove_todo(self, todo, title):
         screen_manager.get_screen("main").todo_list.remove_widget(todo)
+
+    def save_todo(self, title, description):
+        with open("data.json",'r+') as file:
+            file_data = json.load(file)
+            format = {
+                "title": title, 
+                "description": description,
+                "time": datetime.datetime.now().strftime("%b %d, %I:%M %p")
+            }
+            file_data["todo_card"].append(format)
+            file.seek(0)
+            json.dump(file_data, file, indent=3)
 
 if __name__ == "__main__":
     TasksistorApp().run()
