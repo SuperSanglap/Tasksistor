@@ -13,12 +13,15 @@ from datetime import date
 import datetime, json
 
 Window.size = (350, 600)
+index = 0
 
 class TodoCard(FakeRectangularElevationBehavior, MDFloatLayout):
     title = StringProperty()
     description = StringProperty()
+    time = StringProperty()
 
 class TasksistorApp(MDApp):
+    
 
     def build(self):
         global screen_manager
@@ -36,7 +39,7 @@ class TasksistorApp(MDApp):
         day = str(datetime.datetime.now().strftime("%d"))
         screen_manager.get_screen("main").date.text = f"{days[wd]}, {day} {month} {year}"
         try:
-            self.load_todo()
+            self.load_index()
         except Exception as e:
             print(e)
 
@@ -61,7 +64,7 @@ class TasksistorApp(MDApp):
             screen_manager.current = "main"
             screen_manager.transition.direction = "right"
             screen_manager.get_screen("main").todo_list.add_widget(TodoCard(title=title.title(), description=description))
-
+            
             self.save_todo(title, description)
 
             screen_manager.get_screen("add_todo").description.text = ""
@@ -78,17 +81,35 @@ class TasksistorApp(MDApp):
     def remove_todo(self, todo, title):
         screen_manager.get_screen("main").todo_list.remove_widget(todo)
 
+    def save_index(self):
+        global index
+        with open("index.txt", 'w') as file:
+            line = file.writelines(str(index))
+        index+= 1
+
+    def load_index(self):
+        with open("index.txt", 'r') as file:
+            line = file.readline()
+            global index
+            if int(line) != 0:
+                index = int(line) +1
+            else:
+                index = int(line)
+
     def save_todo(self, title, description):
         with open("data.json",'r+') as file:
+            global index
             file_data = json.load(file)
             format = {
+                "index": index,
                 "title": title, 
                 "description": description,
                 "time": datetime.datetime.now().strftime("%b %d, %I:%M %p")
             }
             file_data["todo_card"].append(format)
             file.seek(0)
-            json.dump(file_data, file, indent=3)
+            json.dump(file_data, file, indent=4)
+            self.save_index()
 
 if __name__ == "__main__":
     TasksistorApp().run()
