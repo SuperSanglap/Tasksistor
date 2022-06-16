@@ -80,21 +80,21 @@ class TasksistorApp(MDApp):
 
     def remove_todo(self, todo, title):
         screen_manager.get_screen("main").todo_list.remove_widget(todo)
+        with open("data.json",'r+') as file:
+            data = json.load(file)
+            del data['todo_card']
 
     def save_index(self):
         global index
         with open("index.txt", 'w') as file:
             line = file.writelines(str(index))
-        index+= 1
+        index += 1
 
     def load_index(self):
         with open("index.txt", 'r') as file:
             line = file.readline()
             global index
-            if int(line) != 0:
-                index = int(line) +1
-            else:
-                index = int(line)
+            index = int(line) +1
 
     def save_todo(self, title, description):
         with open("data.json",'r+') as file:
