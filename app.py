@@ -96,11 +96,12 @@ class TasksistorApp(MDApp):
             index = int(line) +1
 
     def save_todo(self, title, description):
-        with open("data/title.txt", 'w') as file:
+        self.save_index()
+        with open("data/title.txt", 'a') as file:
             file.write(title + "\n")
-        with open("data/description.txt", 'w') as file:
+        with open("data/description.txt", 'a') as file:
             file.write(description + "\n")
-        with open("data/time.txt", 'w') as file:
+        with open("data/time.txt", 'a') as file:
             file.write(self.time() + "\n")
 
 if __name__ == "__main__":
