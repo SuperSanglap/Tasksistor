@@ -10,7 +10,7 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.properties import StringProperty
 from kivy.core.window import Window
 from datetime import date
-import datetime, json
+import datetime, json, csv
 
 Window.size = (350, 600)
 index = 0
@@ -38,10 +38,9 @@ class TasksistorApp(MDApp):
         month = str(datetime.datetime.now().strftime("%b"))
         day = str(datetime.datetime.now().strftime("%d"))
         screen_manager.get_screen("main").date.text = f"{days[wd]}, {day} {month} {year}"
-        try:
-            self.load_index()
-        except Exception as e:
-            print(e)
+        
+        self.load_index()
+        self.load_todo()
 
     def on_complete(self, checkbox, value, description, bar, delete):
         if value:
@@ -79,30 +78,42 @@ class TasksistorApp(MDApp):
             Snackbar(text="Too Long description!", snackbar_x="10dp", snackbar_y="10dp", size_hint_y=.08, size_hint_x=(Window.width-(dp(10)*2))/Window.width, bg_color=(1,170/255,23/255,1), font_size="18sp").open()
 
     def remove_todo(self, todo, title):
+        global index
+        if index > 0:
+            index -= 1
+        else:
+            index =0
         screen_manager.get_screen("main").todo_list.remove_widget(todo)
-
-  
 
     def save_index(self):
         global index
-        with open("data/index.txt", 'w') as file:
+        with open("data/index.dat", 'w') as file:
             line = file.writelines(str(index))
         index += 1
 
     def load_index(self):
-        with open("data/index.txt", 'r') as file:
+        with open("data/index.dat", 'r') as file:
             line = file.readline()
             global index
             index = int(line) +1
 
     def save_todo(self, title, description):
         self.save_index()
-        with open("data/title.txt", 'a') as file:
-            file.write(title + "\n")
-        with open("data/description.txt", 'a') as file:
-            file.write(description + "\n")
-        with open("data/time.txt", 'a') as file:
-            file.write(self.time() + "\n")
+        rows = [title, description, self.time()]
+
+        with open("data/data.csv", 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(rows)
+
+    def load_todo(self):
+        with open('data/data.csv') as f:
+            reader = csv.reader(f)
+            data = list(reader)
+            for row in data:
+                title = row[0]
+                description = row[1]
+                time = row[2]
+                screen_manager.get_screen("main").todo_list.add_widget(TodoCard(title=title, description=description))
 
 if __name__ == "__main__":
     TasksistorApp().run()
