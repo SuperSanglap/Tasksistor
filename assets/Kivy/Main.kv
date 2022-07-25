@@ -25,7 +25,7 @@
         unselected_color: 1, 170/255, 23/255, 1
         selected_color: 0, 179/255, 0, 1
         pos_hint: {"center_x": .95, "center_y": .8}
-        on_active: app.on_complete(*args, description, bar, delete)
+        on_active: app.on_complete(*args, description, bar)
     MDLabel: #Description
         id: description
         text: root.description
@@ -43,16 +43,6 @@
         size_hint_x: .7
         line_height: .5
         pos_hint: {"x": .69, "center_y": .07}
-    MDIconButton: #Delete
-        id: delete 
-        icon: "delete"
-        pos_hint: {"center_x": .949, "center_y": .45}
-        user_font_size: "28sp"
-        theme_text_color: "Custom"
-        text_color: 180/255, 180/255, 180/255, 1
-        ripple_scale: 0
-        on_release: 
-            app.remove_todo(todo, title)
 MDScreen:
     date: date
     todo_list: todo_list
@@ -80,6 +70,15 @@ MDScreen:
             on_release: 
                 root.manager.transition.direction = "left" 
                 root.manager.current = "add_todo"
+        MDIconButton:
+            icon: "delete"
+            pos_hint: {"center_x": .72, "center_y": .925}
+            user_font_size: "30sp"
+            md_bg_color: 1, 170/255, 23/255, 1
+            theme_text_color: "Custom"
+            text_color: 1,1,1,1
+            on_release: 
+                app.remove_todo()
         ScrollView:
             do_scroll_y: True            
             do_scroll_x: False
