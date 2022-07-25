@@ -13,7 +13,6 @@ from datetime import date
 import datetime, json, csv
 
 Window.size = (350, 600)
-index = 0
 
 class TodoCard(FakeRectangularElevationBehavior, MDFloatLayout):
     title = StringProperty()
@@ -37,9 +36,10 @@ class TasksistorApp(MDApp):
         month = str(datetime.datetime.now().strftime("%b"))
         day = str(datetime.datetime.now().strftime("%d"))
         screen_manager.get_screen("main").date.text = f"{days[wd]}, {day} {month} {year}"
-        
-        self.load_index()
-        self.load_todo()
+        try:
+            self.load_todo()
+        except:
+            pass
 
     def on_complete(self, checkbox, value, description, bar):
         if value:
@@ -59,7 +59,7 @@ class TasksistorApp(MDApp):
         if title != "" and description != "" and len(title) < 21 and len(description) < 61:
             screen_manager.current = "main"
             screen_manager.transition.direction = "right"
-            screen_manager.get_screen("main").todo_list.add_widget(TodoCard(title=title.title(), description=description))
+            screen_manager.get_screen("main").todo_list.add_widget(TodoCard(title=title.title(), description=description, time=self.time()))
             
             self.save_todo(title, description)
 
@@ -79,21 +79,8 @@ class TasksistorApp(MDApp):
         f = open("data/data.csv", 'w+', newline='')
         f.close()
 
-    def save_index(self):
-        global index
-        with open("data/index.dat", 'w') as file:
-            line = file.writelines(str(index))
-        index += 1
-
-    def load_index(self):
-        with open("data/index.dat", 'r') as file:
-            line = file.readline()
-            global index
-            index = int(line) +1
-
     def save_todo(self, title, description):
-        self.save_index()
-        rows = [title, description, self.time()]
+        rows = [str(title), str(description), self.time()]
         with open("data/data.csv", 'a', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(rows)
@@ -106,7 +93,7 @@ class TasksistorApp(MDApp):
                 title = row[0]
                 description = row[1]
                 time = row[2]
-                screen_manager.get_screen("main").todo_list.add_widget(TodoCard(title=title, description=description))
+                screen_manager.get_screen("main").todo_list.add_widget(TodoCard(title=title, description=description, time=time))
 
 if __name__ == "__main__":
     TasksistorApp().run()
