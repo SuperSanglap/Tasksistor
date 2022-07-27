@@ -10,7 +10,7 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.properties import StringProperty
 from kivy.core.window import Window
 from datetime import date
-import datetime, json, csv
+import datetime, csv
 
 Window.size = (350, 600)
 
@@ -31,7 +31,7 @@ class TasksistorApp(MDApp):
     def on_start(self):
         today = date.today()
         wd = date.weekday(today)
-        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         year = str(datetime.datetime.now().year)
         month = str(datetime.datetime.now().strftime("%b"))
         day = str(datetime.datetime.now().strftime("%d"))
