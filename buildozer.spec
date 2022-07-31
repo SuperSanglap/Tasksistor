@@ -4,7 +4,7 @@
 title = Tasksistor
 
 # (str) Package name
-package.name = Tasksistpr
+package.name = Tasksistor
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = sanglap.tasksistor
