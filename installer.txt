@@ -1,0 +1,1 @@
+pyinstaller main.py -w --onefile -n "Tasksistor" -i "H:\Python\Main\GUI\Tasksistor\assets\IMG\Logo.png"
