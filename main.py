@@ -75,10 +75,13 @@ class TasksistorApp(MDApp):
         elif len(description) > 55:
             Snackbar(text="Too Long description!", snackbar_x="10dp", snackbar_y="10dp", size_hint_y=.08, size_hint_x=(Window.width-(dp(10)*2))/Window.width, bg_color=(1,170/255,23/255,1), font_size="18sp").open()
 
-    def remove_todo(self):
+    def remove_all_todo(self):
         screen_manager.get_screen("main").todo_list.clear_widgets()
         f = open("data/data.csv", 'w+', newline='')
         f.close()
+
+    def remove_todo(self, todo):
+        screen_manager.get_screen("main").todo_list.remove_widget(todo)
 
     def save_todo(self, title, description):
         rows = [str(title), str(description), self.time()]

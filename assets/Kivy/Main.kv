@@ -43,6 +43,15 @@
         size_hint_x: .7
         line_height: .5
         pos_hint: {"x": .695, "center_y": .07}
+    MDIconButton:
+        id: delete 
+        icon: "delete"
+        pos_hint: {"center_x": .949, "center_y": .45}
+        user_font_size: "28sp"
+        theme_text_color: "Custom"
+        text_color: 180/255, 180/255, 180/255, 1
+        on_release: 
+            app.remove_todo(todo)
 MDScreen:
     date: date
     todo_list: todo_list
@@ -78,7 +87,7 @@ MDScreen:
             theme_text_color: "Custom"
             text_color: 1,1,1,1
             on_release: 
-                app.remove_todo()
+                app.remove_all_todo()
         ScrollView:
             do_scroll_y: True            
             do_scroll_x: False
