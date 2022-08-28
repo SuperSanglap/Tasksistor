@@ -80,7 +80,29 @@ class TasksistorApp(MDApp):
         f = open("data/data.csv", 'w+', newline='')
         f.close()
 
-    def remove_todo(self, todo):
+    def remove_todo(self, todo, title, description, time):
+        data = open("data/data.csv", "r")
+        data = ' '.join([i for i in data])
+        title = title.text
+        description = description.text
+        time = time.text
+
+        print(data)
+
+        row = f'\b{title.title()},{description},"{time}"\n'
+
+        for line in data:
+            try:
+                if line == row:
+                    data = data.replace(row, "")
+            except:
+                print("No No")
+
+        f = open("data/data.csv", 'w+', newline='')
+        f.close() # Clear File
+        f = open('data/data.csv','w')
+        f.write(f'{data}\n') # Write New Data
+        f.close()
         screen_manager.get_screen("main").todo_list.remove_widget(todo)
 
     def save_todo(self, title, description):
@@ -94,10 +116,13 @@ class TasksistorApp(MDApp):
             reader = csv.reader(f)
             data = list(reader)
             for row in data:
-                title = row[0]
-                description = row[1]
-                time = row[2]
-                screen_manager.get_screen("main").todo_list.add_widget(TodoCard(title=title, description=description, time=time))
+                try:
+                    title = row[0]
+                    description = row[1]
+                    time = row[2]
+                    screen_manager.get_screen("main").todo_list.add_widget(TodoCard(title=title, description=description, time=time))
+                except:
+                    pass
 
 if __name__ == "__main__":
     TasksistorApp().run()
