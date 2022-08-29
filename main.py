@@ -81,27 +81,22 @@ class TasksistorApp(MDApp):
         f.close()
 
     def remove_todo(self, todo, title, description, time):
-        data = open("data/data.csv", "r")
-        data = ' '.join([i for i in data])
         title = title.text
         description = description.text
         time = time.text
-
-        print(data)
-
         row = f'\b{title.title()},{description},"{time}"\n'
 
-        for line in data:
-            try:
+        with open("data/data.csv") as f:
+            reader = csv.reader(f)
+            for line in reader:
+                line = " ".join(line)
                 if line == row:
-                    data = data.replace(row, "")
-            except:
-                print("No No")
-
+                    line = line.replace(row, "")
+        
         f = open("data/data.csv", 'w+', newline='')
-        f.close() # Clear File
+        f.close()
         f = open('data/data.csv','w')
-        f.write(f'{data}\n') # Write New Data
+        f.write(f'{line}\n')
         f.close()
         screen_manager.get_screen("main").todo_list.remove_widget(todo)
 
