@@ -81,24 +81,27 @@ class TasksistorApp(MDApp):
         f.close()
 
     def remove_todo(self, todo, title, description, time):
+        dataOld = open("data/data.csv", "r")
+        dataOld = ''.join([i for i in dataOld])
         title = title.text
-        description = description.text
+        description = description.text  
         time = time.text
-        row = f'\b{title.title()},{description},"{time}"\n'
+        row = f'{title.lower()},{description},"{time}"'
 
-        with open("data/data.csv") as f:
+        with open('data/data.csv') as f:
             reader = csv.reader(f)
-            for line in reader:
-                line = " ".join(line)
-                if line == row:
-                    line = line.replace(row, "")
-        
-        f = open("data/data.csv", 'w+', newline='')
-        f.close()
-        f = open('data/data.csv','w')
-        f.write(f'{line}\n')
-        f.close()
-        screen_manager.get_screen("main").todo_list.remove_widget(todo)
+            data = list(reader)
+            for rowCSV in data:
+                line = f'{rowCSV[0].lower()},{rowCSV[1]},"{rowCSV[2]}"'
+                if row == line:
+                    dataOld = dataOld.replace(line, '')
+                    f = open("data/data.csv", 'w+', newline='')
+                    f.close()
+                    f = open('data/data.csv', 'w')
+                    f.write(f'{dataOld}\n')
+                    f.close()
+                    screen_manager.get_screen("main").todo_list.remove_widget(todo)
+                    break
 
     def save_todo(self, title, description):
         rows = [str(title), str(description), self.time()]
