@@ -81,27 +81,32 @@ class TasksistorApp(MDApp):
         f.close()
 
     def remove_todo(self, todo, title, description, time):
-        dataOld = open("data/data.csv", "r")
-        dataOld = ''.join([i for i in dataOld])
         title = title.text
         description = description.text  
         time = time.text
         row = f'{title.lower()},{description},"{time}"'
-
-        with open('data/data.csv') as f:
-            reader = csv.reader(f)
-            data = list(reader)
-            for rowCSV in data:
-                line = f'{rowCSV[0].lower()},{rowCSV[1]},"{rowCSV[2]}"'
-                if row == line:
-                    dataOld = dataOld.replace(line, '')
-                    f = open("data/data.csv", 'w+', newline='')
-                    f.close()
-                    f = open('data/data.csv', 'w')
-                    f.write(f'{dataOld}\n')
-                    f.close()
-                    screen_manager.get_screen("main").todo_list.remove_widget(todo)
-                    break
+        try:
+            dataOld = open("data/data.csv", "r")
+            dataOld = ''.join([i for i in dataOld])
+            with open('data/data.csv') as f:
+                reader = csv.reader(f)
+                data = list(reader)
+                for rowCSV in data:
+                    line = f'{rowCSV[0].lower()},{rowCSV[1]},"{rowCSV[2]}"'
+                    try:
+                        if row == line:
+                            dataOld = dataOld.replace(line, '')
+                            f = open("data/data.csv", 'w+', newline='')
+                            f.close()
+                            f = open('data/data.csv', 'w')
+                            f.write(f'{dataOld}\n')
+                            f.close()
+                            screen_manager.get_screen("main").todo_list.remove_widget(todo)
+                            break
+                    except:
+                        pass
+        except:        
+            Snackbar(text="Error! Try Clearing the Whole File.", snackbar_x="10dp", snackbar_y="10dp", size_hint_y=.08, size_hint_x=(Window.width-(dp(10)*2))/Window.width, bg_color=(1,170/255,23/255,1), font_size="18sp").open()
 
     def save_todo(self, title, description):
         rows = [str(title), str(description), self.time()]
