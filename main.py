@@ -103,7 +103,7 @@ class TasksistorApp(MDApp):
                             f.close()
                             screen_manager.get_screen("main").todo_list.remove_widget(todo)
                             break
-                        else:
+                        elif "[s]" in row or "[/s]" in row:
                            Snackbar(text="Deselect to Delete Todo", snackbar_x="10dp", snackbar_y="10dp", size_hint_y=.08, size_hint_x=(Window.width-(dp(10)*2))/Window.width, bg_color=(1,170/255,23/255,1), font_size="18sp").open() 
                     except:
                         pass
