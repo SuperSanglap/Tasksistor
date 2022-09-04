@@ -25,7 +25,7 @@
         unselected_color: 1, 170/255, 23/255, 1
         selected_color: 0, 179/255, 0, 1
         pos_hint: {"center_x": .95, "center_y": .8}
-        on_active: app.on_complete(*args, description, bar)
+        on_active: app.on_complete(*args, title, description, bar)
     MDLabel: #Description
         id: description
         text: root.description
@@ -80,7 +80,7 @@ MDScreen:
                 root.manager.transition.direction = "left" 
                 root.manager.current = "add_todo"
         MDIconButton:
-            icon: "delete"
+            icon: "broom"
             pos_hint: {"center_x": .72, "center_y": .925}
             user_font_size: "30sp"
             md_bg_color: 1, 170/255, 23/255, 1

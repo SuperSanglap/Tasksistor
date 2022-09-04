@@ -42,7 +42,7 @@ class TasksistorApp(MDApp):
         except:
             pass
 
-    def on_complete(self, checkbox, value, description, bar):
+    def on_complete(self, checkbox, value, title, description, bar):
         if value:
             description.text = f"[s]{description.text}[/s]"
             bar.md_bg_color = 0, 179/255, 0, 1
@@ -82,7 +82,7 @@ class TasksistorApp(MDApp):
 
     def remove_todo(self, todo, title, description, time):
         title = title.text
-        description = description.text  
+        description = description.text         
         time = time.text
         row = f'{title.lower()},{description},"{time}"'
         try:
@@ -99,13 +99,15 @@ class TasksistorApp(MDApp):
                             f = open("data/data.csv", 'w+', newline='')
                             f.close()
                             f = open('data/data.csv', 'w')
-                            f.write(f'{dataOld}\n')
+                            f.write(dataOld)
                             f.close()
                             screen_manager.get_screen("main").todo_list.remove_widget(todo)
                             break
+                        else:
+                           Snackbar(text="Deselect to Delete Todo", snackbar_x="10dp", snackbar_y="10dp", size_hint_y=.08, size_hint_x=(Window.width-(dp(10)*2))/Window.width, bg_color=(1,170/255,23/255,1), font_size="18sp").open() 
                     except:
                         pass
-        except:        
+        except:
             Snackbar(text="Error! Try Clearing the Whole File.", snackbar_x="10dp", snackbar_y="10dp", size_hint_y=.08, size_hint_x=(Window.width-(dp(10)*2))/Window.width, bg_color=(1,170/255,23/255,1), font_size="18sp").open()
 
     def save_todo(self, title, description):
