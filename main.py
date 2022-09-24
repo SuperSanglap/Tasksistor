@@ -4,6 +4,7 @@ Config.set('kivy','window_icon','assets/IMG/Logo.png')
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
 from kivy.lang import Builder
+from kivy.garden.notification import Notification
 from kivy.metrics import dp
 from kivymd.uix.snackbar import Snackbar
 from kivymd.uix.behaviors.elevation import FakeRectangularElevationBehavior
@@ -28,6 +29,13 @@ class TasksistorApp(MDApp):
         screen_manager.add_widget(Builder.load_file("assets/Kivy/Main.kv"))
         screen_manager.add_widget(Builder.load_file("assets/Kivy/AddTodo.kv"))
         return screen_manager
+
+    def notify(self, description):
+        Notification().open(
+            title = "Tasksistor",
+            message = description,
+            timeout = 3,
+            icon = "assets/IMG/Logo.png")
 
     def on_start(self):
         today = date.today()
@@ -115,19 +123,23 @@ class TasksistorApp(MDApp):
         with open("data/data.csv", 'a', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(rows)
+            self.notify(f"Your Tasks Have Been Saved!")
 
     def load_todo(self):
         with open('data/data.csv') as f:
             reader = csv.reader(f)
             data = list(reader)
             for row in data:
+                index = 0
                 try:
                     title = row[0]
                     description = row[1]
                     time = row[2]
                     screen_manager.get_screen("main").todo_list.add_widget(TodoCard(title=title, description=description, time=time))
+                    index += 1
                 except:
                     pass
+                self.notify(f"You Have {index} Pending Task(s)!")
 
 if __name__ == "__main__":
     TasksistorApp().run()
