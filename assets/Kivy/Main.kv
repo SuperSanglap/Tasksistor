@@ -51,7 +51,6 @@
         theme_text_color: "Custom"
         text_color: 180/255, 180/255, 180/255, 1
         on_release: 
-            app.notify("Task Deleted!")
             app.remove_todo(todo, title, description, time)
 MDScreen:
     date: date
@@ -89,7 +88,6 @@ MDScreen:
             text_color: 1,1,1,1
             on_release: 
                 app.remove_all_todo()
-                app.notify("All Tasks Cleared!")
         ScrollView:
             do_scroll_y: True            
             do_scroll_x: False
