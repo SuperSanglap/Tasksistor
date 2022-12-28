@@ -3,6 +3,7 @@ Config.set('graphics', 'resizable', False)
 Config.set('kivy','window_icon','assets/IMG/Logo.png')
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
+from kivy import platform
 from kivy.lang import Builder
 from kivy.metrics import dp
 from kivymd.uix.snackbar import Snackbar
@@ -30,6 +31,9 @@ class TasksistorApp(MDApp):
         return screen_manager
 
     def on_start(self):
+        if platform == "android":
+            from android.permissions import request_permissions, Permission
+            request_permissions([Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
         today = date.today()
         wd = date.weekday(today)
         days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
